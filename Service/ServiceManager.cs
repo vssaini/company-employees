@@ -9,10 +9,10 @@ namespace Service
         private readonly Lazy<ICompanyService> _companyService;
         private readonly Lazy<IEmployeeService> _employeeService;
 
-        public ServiceManager(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
+        public ServiceManager(IRepositoryManager repository, IMapper mapper)
         {
-            _companyService = new Lazy<ICompanyService>(() => new CompanyService(repository, logger, mapper));
-            _employeeService = new Lazy<IEmployeeService>(() => new EmployeeService(repository, logger, mapper));
+            _companyService = new Lazy<ICompanyService>(() => new CompanyService(repository, mapper));
+            _employeeService = new Lazy<IEmployeeService>(() => new EmployeeService(repository, mapper));
         }
 
         public ICompanyService CompanyService => _companyService.Value;
