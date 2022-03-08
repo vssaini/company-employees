@@ -38,7 +38,8 @@ namespace CompanyEmployees
             }
             else
             {
-                FormatCsv(buffer, (CompanyDto)context.Object);
+                if (context.Object is not null)
+                    FormatCsv(buffer, (CompanyDto)context.Object);
             }
 
             await response.WriteAsync(buffer.ToString());
