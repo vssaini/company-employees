@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
@@ -17,7 +18,7 @@ namespace Repository
 
         public Employee? GetEmployee(Guid companyId, Guid id, bool trackChanges)
         {
-            return FindByCondition(e => e.CompanyId.Equals(id) && e.Id.Equals(id), trackChanges).SingleOrDefault();
+            return FindByCondition(e => e.CompanyId.Equals(companyId) && e.Id.Equals(id), trackChanges).SingleOrDefault();
         }
 
         public void CreateEmployee(Guid companyId, Employee employee)
@@ -25,5 +26,7 @@ namespace Repository
             employee.CompanyId = companyId;
             Create(employee);
         }
+
+        public void DeleteEmployee(Employee employee) => Delete(employee);
     }
 }
