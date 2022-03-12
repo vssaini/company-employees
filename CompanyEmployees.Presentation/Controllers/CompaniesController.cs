@@ -53,9 +53,9 @@ namespace CompanyEmployees.Presentation.Controllers
         [HttpPost("collection")]
         public IActionResult CreateCompanyCollection([FromBody] IEnumerable<CompanyForCreationDto> companyCollection)
         {
-            var result = _service.CompanyService.CreateCompanyCollection(companyCollection);
+            var (companies, ids) = _service.CompanyService.CreateCompanyCollection(companyCollection);
 
-            return CreatedAtRoute("CompanyCollection", new { result.ids }, result.companies);
+            return CreatedAtRoute("CompanyCollection", new { ids }, companies);
         }
 
         [HttpDelete("{id:guid}")]

@@ -32,7 +32,7 @@ namespace CompanyEmployees.Extensions
 
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
             services.AddDbContext<RepositoryContext>(opts => opts.UseSqlServer(configuration.GetConnectionString("sqlConnection"))
-            .LogTo(Console.WriteLine, LogLevel.Information)
+            //.LogTo(Console.WriteLine, LogLevel.Information) // Forlogging queries that execute
             );
 
         public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder) => builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
