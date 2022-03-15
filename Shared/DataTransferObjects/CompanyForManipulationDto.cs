@@ -12,6 +12,7 @@ namespace Shared.DataTransferObjects
         [MaxLength(60, ErrorMessage = "Maximum length for the Address is 60 characters.")]
         public string? Address { get; init; }
 
+        [Required(ErrorMessage = "Company country is a required field.")]        
         public string? Country { get; init; }
         public IEnumerable<EmployeeForCreationDto>? Employees { get; init; }
     }
