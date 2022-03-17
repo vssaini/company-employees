@@ -13,7 +13,7 @@ namespace Repository
 
         public async Task<PagedList<Employee>> GetEmployeesAsync(Guid companyId, EmployeeParameters empParams, bool trackChanges)
         {
-            var employees = await FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges)
+            var employees = await FindByCondition(e => e.CompanyId.Equals(companyId) && (e.Age >= empParams.MinAge && e.Age <= empParams.MaxAge), trackChanges)
               .OrderBy(e => e.Name)
               .Skip((empParams.PageNumber - 1) * empParams.PageSize)
               .Take(empParams.PageSize)
