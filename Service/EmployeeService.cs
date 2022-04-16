@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities.Exceptions;
+using Entities.LinkModels;
 using Entities.Models;
 using Service.Contracts;
 using Shared.DataTransferObjects;
@@ -12,25 +13,27 @@ namespace Service
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;
+        private readonly IEmployeeLinks _employeeLinks;
 
-        public EmployeeService(IRepositoryManager repository, IMapper mapper)
+        public EmployeeService(IRepositoryManager repository, IMapper mapper, IEmployeeLinks employeeLinks)
         {
             _repository = repository;
             _mapper = mapper;
+            _employeeLinks = employeeLinks;
         }
 
-        public async Task<(IEnumerable<EmployeeDto> employees, MetaData metaData)> GetEmployeesAsync(Guid companyId, EmployeeParameters empParams, bool trackChanges)
+        public async Task<(LinkResponse linkResponse, MetaData metaData)> GetEmployeesAsync(Guid companyId, LinkParameters linkParams, bool trackChanges)
         {
-            if(!empParams.ValidAgeRange)
+            if (!linkParams.EmployeeParameters.ValidAgeRange)
                 throw new MaxAgeRangeBadRequestException();
 
             await CheckIfCompanyExistsAsync(companyId, trackChanges);
 
-            var employeesWithMetaData = await _repository.Employee.GetEmployeesAsync(companyId, empParams, trackChanges);
+            var employeesWithMetaData = await _repository.Employee.GetEmployeesAsync(companyId, linkParams.EmployeeParameters, trackChanges);
             var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employeesWithMetaData);
+            var links = _employeeLinks.TryGenerateLinks(employeesDto, linkParams.EmployeeParameters.Fields, companyId, linkParams.Context);
 
-            return (employees: employeesDto, metaData: employeesWithMetaData.MetaData);
-            
+            return (linkResponse: links, metaData: employeesWithMetaData.MetaData);
         }
 
         public async Task<EmployeeDto> GetEmployeeAsync(Guid companyId, Guid id, bool trackChanges)
