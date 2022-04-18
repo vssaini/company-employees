@@ -13,7 +13,7 @@ namespace CompanyEmployees.Presentation.Controllers
         private readonly IServiceManager _service;
 
         public CompaniesController(IServiceManager service) => _service = service;
-
+        
         [HttpGet]
         public async Task<IActionResult> GetCompanies()
         {
@@ -32,7 +32,7 @@ namespace CompanyEmployees.Presentation.Controllers
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
-        { 
+        {
             var createdCompany = await _service.CompanyService.CreateCompanyAsync(company);
 
             return CreatedAtRoute("CompanyById", new { id = createdCompany.Id }, createdCompany);
@@ -69,6 +69,14 @@ namespace CompanyEmployees.Presentation.Controllers
             await _service.CompanyService.UpdateCompanyAsync(id, company, true);
 
             return NoContent();
+        }
+
+        [HttpOptions]
+        public IActionResult GetCompaniesOptions()
+        {
+            Response.Headers.Add("Allow", "GET, OPTIONS, POST, PUT, DELETE");
+
+            return Ok();
         }
     }
 }
