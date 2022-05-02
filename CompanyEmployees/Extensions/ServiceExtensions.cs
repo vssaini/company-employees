@@ -76,5 +76,7 @@ namespace CompanyEmployees.Extensions
                 opt.ApiVersionReader = new QueryStringApiVersionReader("api-version");
             });
         }
+
+        public static void ConfigureResponseCaching(this IServiceCollection services) => services.AddResponseCaching();
     }
 }

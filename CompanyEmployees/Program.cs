@@ -20,6 +20,8 @@ builder.Services.ConfigureDataShaping();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureVersioning();
+builder.Services.ConfigureResponseCaching();
+
 builder.Services.AddAutoMapper(typeof(Program));
 
 // Suppress default model state validation that's implemented due to ApiController attribute in all API controllers
@@ -37,6 +39,7 @@ builder.Services.AddControllers(config =>
     config.RespectBrowserAcceptHeader = true;
     config.ReturnHttpNotAcceptable = true;
     config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
+    config.CacheProfiles.Add("120SecondsDuration", new CacheProfile { Duration = 120 });
 })
     .AddXmlDataContractSerializerFormatters()
     .AddCustomCSVFormatter()
@@ -61,6 +64,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 
 app.UseCors("CorsPolicy");
+app.UseResponseCaching();
 
 app.UseAuthorization();
 
