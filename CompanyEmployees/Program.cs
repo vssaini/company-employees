@@ -25,9 +25,13 @@ builder.Services.ConfigureResponseCaching();
 builder.Services.ConfigureHttpCacheHeaders();
 
 builder.Services.AddAutoMapper(typeof(Program));
+
 builder.Services.AddMemoryCache();
 builder.Services.ConfigureRateLimitingOptions();
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
 
 // Suppress default model state validation that's implemented due to ApiController attribute in all API controllers
 builder.Services.Configure<ApiBehaviorOptions>(opts =>
@@ -74,6 +78,7 @@ app.UseCors("CorsPolicy");
 app.UseResponseCaching();
 app.UseHttpCacheHeaders();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
