@@ -14,7 +14,7 @@ public class RepositoryContext : IdentityDbContext<User>
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(builder);
+        base.OnModelCreating(builder); // Required for migration to work correctly
 
         builder.ApplyConfiguration(new CompanyConfiguration());
         builder.ApplyConfiguration(new EmployeeConfiguration());
