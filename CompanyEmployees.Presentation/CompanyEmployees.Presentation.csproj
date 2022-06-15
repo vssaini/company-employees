@@ -1,21 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Marvin.Cache.Headers" Version="6.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="6.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DocumentationFile>CompanyEmployees.Presentation.xml</DocumentationFile>
+		<OutputPath></OutputPath>
+		<NoWarn>1701;1702;1591</NoWarn>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Service.Contracts\Service.Contracts.csproj" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">		
+		<NoWarn>1701;1702;1591</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Marvin.Cache.Headers" Version="6.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="6.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Service.Contracts\Service.Contracts.csproj" />
+	</ItemGroup>
 
 </Project>

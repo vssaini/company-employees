@@ -33,6 +33,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureJWT(builder.Configuration);
+builder.Services.AddJwtConfiguration(builder.Configuration);
+builder.Services.ConfigureSwagger();
 
 // Suppress default model state validation that's implemented due to ApiController attribute in all API controllers
 builder.Services.Configure<ApiBehaviorOptions>(opts =>
@@ -59,18 +61,25 @@ builder.Services.AddCustomMediaTypes();
 
 var app = builder.Build();
 
-var logger = app.Services.GetRequiredService<ILoggerManager>();
-app.ConfigureExceptionHandler(logger);
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsProduction())
     app.UseHsts();
+
+var logger = app.Services.GetRequiredService<ILoggerManager>();
+app.ConfigureExceptionHandler(logger);
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.All
+});
+
+app.UseSwagger();
+app.UseSwaggerUI(s =>
+{
+    s.SwaggerEndpoint("/swagger/v1/swagger.json", "Pitrams Tech API v1");
+    s.SwaggerEndpoint("/swagger/v2/swagger.json", "Pitrams Tech API v2");
 });
 
 app.UseIpRateLimiting();
