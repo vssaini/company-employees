@@ -2,6 +2,7 @@
 using Contracts;
 using Entities.Exceptions;
 using Entities.Models;
+using Entities.Responses;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 
@@ -18,20 +19,18 @@ namespace Service
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<CompanyDto>> GetAllCompaniesAsync(bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllCompaniesAsync(bool trackChanges)
         {
             var companies = await _repository.Company.GetAllCompaniesAsync(trackChanges);
 
             var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
-            return companiesDto;
+            return new ApiOkResponse<IEnumerable<CompanyDto>>(companiesDto);
         }
 
-        public async Task<CompanyDto> GetCompanyAsync(Guid companyId, bool trackChanges)
+        public async Task<ApiBaseResponse> GetCompanyAsync(Guid companyId, bool trackChanges)
         {
-            var company = await GetCompanyAndCheckIfItExistsAsync(companyId, trackChanges);
-
-            var companyDto = _mapper.Map<CompanyDto>(company);
-            return companyDto;
+            var baseResult = await GetCompanyResponseAsync(companyId, trackChanges);
+            return baseResult;
         }
 
         public async Task<CompanyDto> CreateCompanyAsync(CompanyForCreationDto company)
@@ -102,6 +101,16 @@ namespace Service
                 throw new CompanyNotFoundException(companyId);
 
             return company;
+        }
+
+        private async Task<ApiBaseResponse> GetCompanyResponseAsync(Guid companyId, bool trackChanges)
+        {
+            var company = await _repository.Company.GetCompanyAsync(companyId, trackChanges);
+            if (company is null)
+                return new CompanyNotFoundResponse(companyId);
+
+            var companyDto = _mapper.Map<CompanyDto>(company);
+            return new ApiOkResponse<CompanyDto>(companyDto);
         }
     }
 }
